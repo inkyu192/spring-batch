@@ -13,8 +13,10 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: info
+    org:
+      hibernate:
+        SQL: debug
+        type: info
 
 ---
 
