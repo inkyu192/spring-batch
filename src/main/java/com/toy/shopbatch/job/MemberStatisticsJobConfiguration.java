@@ -1,6 +1,7 @@
 package com.toy.shopbatch.job;
 
 import com.toy.shopbatch.domain.Member;
+import com.toy.shopbatch.domain.Member2;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
@@ -51,19 +53,18 @@ public class MemberStatisticsJobConfiguration {
         int chunkSize = 2;
 
         return new StepBuilder("step1", jobRepository)
-                .<Member, Member>chunk(chunkSize, transactionManager)
+                .<Member, Member2>chunk(chunkSize, transactionManager)
                 .reader(new JpaPagingItemReaderBuilder<Member>()
-                        .name("tt")
+                        .name("memberJpaPagingItemReader")
                         .entityManagerFactory(entityManagerFactory)
                         .pageSize(chunkSize)
                         .queryString("select m from Member m")
                         .build()
                 )
-                .processor(item -> {
-                    log.info("process.item: {}", item);
-                    return item;
-                })
-                .writer(chunk -> log.info("writer.chunk: {}", chunk))
+                .processor(Member2::createMember2)
+                .writer(new JpaItemWriterBuilder<Member2>()
+                        .entityManagerFactory(entityManagerFactory)
+                        .build())
                 .build();
     }
 }
