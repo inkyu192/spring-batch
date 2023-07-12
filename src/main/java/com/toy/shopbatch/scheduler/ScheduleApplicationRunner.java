@@ -17,8 +17,8 @@ public class ScheduleApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         JobDetail jobDetail = JobBuilder
-                .newJob(TestJob.class)
-                .withIdentity("LogJob")
+                .newJob(MemberStatisticsJob.class)
+                .withIdentity("MemberStatisticsJob")
                 .build();
 
         Trigger trigger = TriggerBuilder
