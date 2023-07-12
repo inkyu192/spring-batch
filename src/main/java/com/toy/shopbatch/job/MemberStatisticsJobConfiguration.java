@@ -24,36 +24,36 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class MemberStatisticsJobConfiguration {
 
     private final JobRepository jobRepository;
-    private final PlatformTransactionManager transactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
     @Bean
-    public Job memberStatisticsJob(Step step1, Step step2) {
+    public Job memberStatisticsJob(Step memberStep1, Step memberStep2) {
         return new JobBuilder("memberStatisticsJob", jobRepository)
-                .start(step1)
-                .next(step2)
+                .start(memberStep1)
+                .next(memberStep2)
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
 
     @Bean
-    public Step step1() {
+    public Step memberStep1() {
         return new StepBuilder("step1", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     log.info("==========================");
                     log.info("step1");
                     log.info("==========================");
                     return RepeatStatus.FINISHED;
-                }, transactionManager)
+                }, platformTransactionManager)
                 .build();
     }
 
     @Bean
-    public Step step2() {
+    public Step memberStep2() {
         int chunkSize = 2;
 
         return new StepBuilder("step1", jobRepository)
-                .<Member, Member2>chunk(chunkSize, transactionManager)
+                .<Member, Member2>chunk(chunkSize, platformTransactionManager)
                 .reader(new JpaPagingItemReaderBuilder<Member>()
                         .name("memberJpaPagingItemReader")
                         .entityManagerFactory(entityManagerFactory)
