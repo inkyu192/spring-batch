@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Scheduler extends BaseDomain {
+public class Schedule extends BaseDomain {
 
     @Id
     @GeneratedValue
-    @Column(name = "scheduler_id")
+    @Column(name = "schedule_id")
     private Long id;
-    private String name;
-    private String useYn;
     private String cron;
+    private String jobName;
+    private String useYn;
 }

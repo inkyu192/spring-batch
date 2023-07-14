@@ -1,8 +1,7 @@
-package com.toy.shopbatch.scheduler;
+package com.toy.shopbatch.quartz;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -13,13 +12,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
-public class MemberStatisticsJob extends QuartzJobBean {
+public class MemberQuartz extends QuartzJobBean {
 
+    private final Job memberJob;
     private final JobLauncher jobLauncher;
-    private final Job memberStatisticsJob;
 
     @SneakyThrows
     @Override
@@ -28,6 +26,6 @@ public class MemberStatisticsJob extends QuartzJobBean {
                 .addDate("date", new Date())
                 .toJobParameters();
 
-        jobLauncher.run(memberStatisticsJob, jobParameters);
+        jobLauncher.run(memberJob, jobParameters);
     }
 }
