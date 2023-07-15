@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class MemberQuartz extends QuartzJobBean {
+public class MemberQuartzJob extends QuartzJobBean {
 
     private final Job memberJob;
     private final JobLauncher jobLauncher;
