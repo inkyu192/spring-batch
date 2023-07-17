@@ -1,4 +1,4 @@
-package com.toy.shopbatch.quartz;
+package com.toy.shopbatch.quartz.job;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
