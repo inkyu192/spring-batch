@@ -2,7 +2,6 @@ spring:
   batch:
     job:
       name: ${job.name}
-#      enabled: false
     jdbc:
       initialize-schema: always
   jpa:
