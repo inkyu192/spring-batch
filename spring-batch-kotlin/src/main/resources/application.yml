@@ -1,8 +1,7 @@
 spring:
   batch:
     job:
-#      name: ${job.name:NONE}
-      enabled: false
+      name: ${job.name:NONE}
     jdbc:
       initialize-schema: embedded
   jpa:

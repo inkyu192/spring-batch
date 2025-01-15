@@ -16,20 +16,17 @@ class JobSchedule(
 ) {
     private val log = LoggerFactory.getLogger(JobSchedule::class.java)
 
-    @Scheduled(cron = "*/5 * * * * *")
+    // @Scheduled(cron = "*/5 * * * * *")
     fun runLogJob() {
         val jobParameters = JobParametersBuilder()
             .addString("targetDate", LocalDate.now().toString())
             .addString("uuid", UUID.randomUUID().toString())
             .toJobParameters()
 
-        try {
-            log.info("Start the job with parameters: {}", jobParameters)
-            jobLauncher.run(logJob, jobParameters)
-            log.info("Complete the job")
-        } catch (e: Exception) {
-            log.error("Error the job", e)
-            throw RuntimeException(e)
-        }
+        runCatching { jobLauncher.run(logJob, jobParameters) }
+            .onFailure {
+                log.error("Error the job", it)
+                throw RuntimeException(it)
+            }
     }
 }
